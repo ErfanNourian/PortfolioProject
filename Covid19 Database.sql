@@ -1,0 +1,135 @@
+/*
+Testing my skills
+*/
+
+-- Create database then import tables
+
+Create Database PortfolioProject
+
+
+-- Looking at CovidDeaths table
+
+Select *
+From PortfolioProject..CovidDeaths
+
+Select *
+From PortfolioProject..CovidDeaths
+Where continent is not null
+order by 3,4
+
+
+-- Selecting my desire data
+
+Select location, date, total_cases, new_cases, total_deaths, population
+From PortfolioProject..CovidDeaths
+Where continent is not null
+order by 1,2
+
+
+-- Most deaths by country
+
+Select location, SUM(CAST(total_deaths As numeric)) As TotalDeaths
+From PortfolioProject..CovidDeaths
+Where continent is not Null
+Group By location
+Order By 2 DESC
+
+
+-- Most deaths by continent
+
+Select continent, SUM(CAST(total_deaths As numeric)) As TotalDeaths
+From PortfolioProject..CovidDeaths
+Where continent is not Null
+Group By continent
+Order By 2 DESC
+
+
+-- Most cases by country
+
+Select location, SUM(new_cases) As TotalCases
+From PortfolioProject..CovidDeaths
+Where continent is not Null
+Group By location
+Order By 2 DESC
+
+
+-- Most cases by continent
+
+Select continent, SUM(new_cases) As TotalCases
+From PortfolioProject..CovidDeaths
+Where continent is not Null
+Group By continent
+Order By 2 DESC
+
+
+-- showing total case vs total deaths in canada
+
+Select location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
+From PortfolioProject..CovidDeaths
+Where location like '%canada%'
+and continent is not null
+order by 1,2
+
+
+-- showing what percentage of people in each country infected by Covid each day
+
+Select location, date, population, total_cases, (total_cases/population)*100 as DeathPercentage
+From PortfolioProject..CovidDeaths
+Where continent is not null
+order by 1,2
+
+
+-- Highest rate of infection compare to population
+
+Select location, population, Max(total_cases) as MaxTotalCases, MAX((total_cases/population))*100 as InfectedPercentage
+From PortfolioProject..CovidDeaths
+Where continent is not null
+group by location, population
+order by InfectedPercentage desc
+
+
+-- Countries with Highest Death Count per Population
+
+Select location, population, Max(total_deaths/population)*100 as DeathPerPopulation
+From PortfolioProject..CovidDeaths
+Where continent is not null
+group by location, population
+order by DeathPerPopulation desc
+
+
+-- Showing contintents with the highest death count per population
+
+Select location, population, Max(total_deaths/population)*100 as DeathPerPopulation
+From PortfolioProject..CovidDeaths
+Where continent is null
+group by location, population
+order by DeathPerPopulation desc
+
+
+-- Global Number
+
+Select Sum(new_cases) as SumNewCases, Sum(Cast(new_deaths as int)) as SumNewDeaths, Sum(Cast(new_deaths as int))/Sum(new_cases)*100 as GlobalNumber
+From PortfolioProject..CovidDeaths
+Where continent is not null
+order by GlobalNumber desc
+
+
+-- Shows Percentage of Population that has recieved at least one Covid Vaccine
+
+Select dea.location, population ,Sum(Cast(vac.new_vaccinations as int)) as SumNewVac, Sum(Cast(vac.new_vaccinations as int))/population*100 as PercentageOfVaccination
+From PortfolioProject..CovidDeaths as dea
+join PortfolioProject..CovidVaccinations as vac
+	On dea.location=vac.location
+	and dea.date=vac.date
+Where dea.continent is not null
+group by dea.location, population
+order by SumNewVac desc
+
+
+-- deaths in each day in the world
+Select SUM(CAST(new_deaths as int)) As SumOfDeaths, date
+From PortfolioProject..CovidDeaths
+where continent is not null
+Group By date
+Order By SumOfDeaths desc
+
