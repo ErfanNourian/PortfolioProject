@@ -14,7 +14,7 @@ From PortfolioProject..CovidDeaths
 
 Select *
 From PortfolioProject..CovidDeaths
-Where continent is not null
+Where continent is not null /*This line only specific countries and remove continents statistics*/
 order by 3,4
 
 
@@ -117,30 +117,32 @@ group by location, population
 order by DeathPerPopulation desc
 
 
--- Global Number
+-- Global statistics
 
-Select Sum(new_cases) as SumNewCases, Sum(Cast(new_deaths as int)) as SumNewDeaths, Sum(Cast(new_deaths as int))/Sum(new_cases)*100 as GlobalNumber
+Select Sum(new_cases) as WorldCases, Sum(Cast(new_deaths as int)) as WorldDeaths, Sum(Cast(new_deaths as int))/Sum(new_cases)*100 as GlobalDeathPercentage
 From PortfolioProject..CovidDeaths
 Where continent is not null
-order by GlobalNumber desc
+order by GlobalDeathPercentage desc
 
 
--- Shows Percentage of Population that has recieved at least one Covid Vaccine
+-- deaths in each day in the world
 
-Select dea.location, population ,Sum(Cast(vac.new_vaccinations as int)) as SumNewVac, Sum(Cast(vac.new_vaccinations as int))/population*100 as PercentageOfVaccination
+Select date, SUM(CAST(new_deaths as int)) As SumOfDeaths
+From PortfolioProject..CovidDeaths
+where continent is not null
+Group By date
+Order By SumOfDeaths desc
+
+
+-- Percentage of people who have received at least one vaccine
+
+Select dea.location, population,
+Sum(Cast(vac.new_vaccinations as int)) as AllVaccinatedPeople,
+Sum(Cast(vac.new_vaccinations as int))/population*100 as PercentageOfVaccination
 From PortfolioProject..CovidDeaths as dea
 join PortfolioProject..CovidVaccinations as vac
 	On dea.location=vac.location
 	and dea.date=vac.date
 Where dea.continent is not null
 group by dea.location, population
-order by SumNewVac desc
-
-
--- deaths in each day in the world
-Select SUM(CAST(new_deaths as int)) As SumOfDeaths, date
-From PortfolioProject..CovidDeaths
-where continent is not null
-Group By date
-Order By SumOfDeaths desc
-
+order by AllVaccinatedPeople desc
