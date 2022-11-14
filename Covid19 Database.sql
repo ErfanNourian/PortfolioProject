@@ -82,7 +82,6 @@ GROUP BY [location]
 
 SELECT CTE_MaxDeathPer.[location], CTE_MaxDeathPer.T_deaths/CTE_MaxDeathPer.T_cases*100
 FROM CTE_MaxDeathPer
---WHERE CTE_MaxDeathPer.[location] is not null
 GROUP BY [location],CTE_MaxDeathPer.T_deaths,CTE_MaxDeathPer.T_cases
 ORDER BY 2 DESC
 
