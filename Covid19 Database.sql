@@ -1,5 +1,5 @@
 /*
-Testing my skills
+Testing my sql and git skills
 */
 
 -- Create database then import tables
@@ -62,21 +62,29 @@ Group By continent
 Order By 2 DESC
 
 
--- showing total case vs total deaths in canada
+-- showing daily DeathPercentage in canada
 
-Select location, date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
+Select date, total_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
 From PortfolioProject..CovidDeaths
 Where location like '%canada%'
 and continent is not null
 order by 1,2
 
 
--- showing what percentage of people in each country infected by Covid each day
+-- showing the highest DeathPercentage in countries
+WITH CTE_MaxDeathPer as 
+(
+SELECT [location],MAX(total_deaths) as T_deaths, MAX(total_cases) as T_cases
+FROM PortfolioProject..CovidDeaths
+WHERE [continent] is not null 
+GROUP BY [location]
+)
 
-Select location, date, population, total_cases, (total_cases/population)*100 as DeathPercentage
-From PortfolioProject..CovidDeaths
-Where continent is not null
-order by 1,2
+SELECT CTE_MaxDeathPer.[location], CTE_MaxDeathPer.T_deaths/CTE_MaxDeathPer.T_cases*100
+FROM CTE_MaxDeathPer
+--WHERE CTE_MaxDeathPer.[location] is not null
+GROUP BY [location],CTE_MaxDeathPer.T_deaths,CTE_MaxDeathPer.T_cases
+ORDER BY 2 DESC
 
 
 -- Highest rate of infection compare to population
