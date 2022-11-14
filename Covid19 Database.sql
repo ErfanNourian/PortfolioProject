@@ -72,6 +72,7 @@ order by 1,2
 
 
 -- showing the highest DeathPercentage in countries
+
 WITH CTE_MaxDeathPer as 
 (
 SELECT [location],MAX(total_deaths) as T_deaths, MAX(total_cases) as T_cases
@@ -95,7 +96,7 @@ group by location, population
 order by InfectedPercentage desc
 
 
--- Countries with Highest Death Count per Population
+-- Highest rate of death compare to countries population
 
 Select location, population, Max(total_deaths/population)*100 as DeathPerPopulation
 From PortfolioProject..CovidDeaths
@@ -104,11 +105,14 @@ group by location, population
 order by DeathPerPopulation desc
 
 
--- Showing contintents with the highest death count per population
+-- Highest rate of death compare to continents population
 
 Select location, population, Max(total_deaths/population)*100 as DeathPerPopulation
 From PortfolioProject..CovidDeaths
 Where continent is null
+and [location] not LIKE '%world%'
+and [location] not LIKE '%international%'
+and [location] not LIKE '%european union%'
 group by location, population
 order by DeathPerPopulation desc
 
