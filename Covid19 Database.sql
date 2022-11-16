@@ -135,14 +135,4 @@ Order By SumOfDeaths desc
 
 
 -- Percentage of people who have received at least one vaccine
-
-Select dea.location, population,
-Sum(Cast(vac.new_vaccinations as int)) as AllVaccinatedPeople,
-Sum(Cast(vac.new_vaccinations as int))/population*100 as PercentageOfVaccination
-From PortfolioProject..CovidDeaths as dea
-join PortfolioProject..CovidVaccinations as vac
-	On dea.location=vac.location
-	and dea.date=vac.date
-Where dea.continent is not null
-group by dea.location, population
-order by AllVaccinatedPeople desc
+-- vaccine data was wrong so i deleted these lines
