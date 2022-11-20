@@ -1,11 +1,7 @@
 # PortfolioProject
-in this repo i challenged my 4 skills:
+This repo is a collection of small projects in Data Science & Analytics. There are projects with the purpose of 
+* Data Exploration
+* Data Cleaning and
+* Data Visualization
 
-1.SQL: Covid19 Database.sql
-
-2.Tableau: https://public.tableau.com/app/profile/erfan.nourian
-
-3.Excel
-
-4.Python
-
+which i challenged my skills in accomplishing them.
